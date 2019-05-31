@@ -32,6 +32,7 @@ Nmea2TFPoseNode::Nmea2TFPoseNode()
   , orientation_stamp_(0)
 {
   initForROS();
+  // initialize the plane(lat&lon) for a rough global position 
   geo_.set_plane(plane_number_);
 }
 
@@ -131,6 +132,31 @@ void Nmea2TFPoseNode::convert(std::vector<std::string> nmea, ros::Time current_s
   }
 }
 
+void Nmea2TFPoseNode::parsepos(sensor_msgs::NavSatFix pos, ros::Time current_stamp)
+{
+  try
+  {
+    
+    ROS_INFO("NavSatFix is subscribed.");
+    
+  }catch (const std::exception &e)
+  {
+    ROS_WARN_STREAM("Message is invalid : " << e.what());
+  }
+}
+
+void Nmea2TFPoseNode::parserpy(ublox_msgs::NavATT rpy, ros::Time current_stamp)
+{
+  try
+  {
+    
+    ROS_INFO("NavATT is subscribed.");
+    
+  }catch (const std::exception &e)
+  {
+    ROS_WARN_STREAM("Message is invalid : " << e.what());
+  }
+}
 void Nmea2TFPoseNode::callbackFromNmeaSentence(const nmea_msgs::Sentence::ConstPtr &msg)
 {
   current_time_ = msg->header.stamp;
@@ -159,6 +185,14 @@ void Nmea2TFPoseNode::callbackFromNmeaSentence(const nmea_msgs::Sentence::ConstP
     publishTF();
     return;
   }
+}
+void Nmea2TFPoseNode::callbackFromNAVSATFIX(const sensor_msgs::NavSatFix::ConstPtr &msg){
+  current_time_ = msg->header.stamp;
+
+}
+
+void Nmea2TFPoseNode::callbackFromNAVATT(const ublox_msgs::NavATT::ConstPtr &msg){
+  
 }
 
 std::vector<std::string> split(const std::string &string)
