@@ -20,6 +20,8 @@
 // C++ includes
 #include <string>
 #include <memory>
+#include <sstream>
+
 
 // ROS includes
 #include <ros/ros.h>
@@ -51,8 +53,9 @@ private:
   ros::Publisher pub1_;
 
   //!! subscriber
-  ros::Subscriber sub1_;
-
+  // ros::Subscriber sub1_;
+  ros::Subscriber sub2_;
+  ros::Subscriber sub3_;
   //!! constants
   const std::string MAP_FRAME_;
   const std::string GPS_FRAME_;
@@ -67,7 +70,7 @@ private:
   tf::TransformBroadcaster br_;
 
   //!! callbacks
-  void callbackFromNmeaSentence(const nmea_msgs::Sentence::ConstPtr &msg);
+  // void callbackFromNmeaSentence(const nmea_msgs::Sentence::ConstPtr &msg);
   // callback for position message from ublox
   void callbackFromNAVSATFIX(const sensor_msgs::NavSatFix::ConstPtr &msg);
   // callback for pose message from ublox
@@ -79,11 +82,11 @@ private:
   void publishPoseStamped();
   void publishTF();
   void createOrientation();
-  void convert(std::vector<std::string> nmea, ros::Time current_stamp);
+  // void convert(std::vector<std::string> nmea, ros::Time current_stamp);
   // parse sensor_msgs/NavSatFix lat&lon&alt to geo_
-  void parsepos(sensor_msgs::NavSatFix pos, ros::Time current_stamp);
+  void parsepos(const sensor_msgs::NavSatFix::ConstPtr &pos);
   // parse ublox_msgs/NavAtt roll&pitch&yaw to geo_
-  void parserpy(ublox_msgs::NavATT rpy, ros::Time current_stamp);
+  void parserpy(const ublox_msgs::NavATT::ConstPtr &rpy);
 
 };
 
